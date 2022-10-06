@@ -17,12 +17,15 @@ development:
 
 ## Get it up and running
 ```
+docker ps
 docker compose build
-docker compose up
 ```
 
 ## Helpful commands
 ```
+docker compose up
+docker compose run web bin/rails c
+
 docker exec -it rails_docker-db-1 psql -U postgres
 docker exec -it rails_docker-web-1 bin/rails db:create
 docker exec -it rails_docker-web-1 bin/rails db:migrate
