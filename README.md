@@ -33,3 +33,6 @@ docker exec -it rails_docker-web-1 bin/rails db:create
 docker exec -it rails_docker-web-1 bin/rails db:migrate
 docker exec -it rails_docker-web-1 bin/rails c
 ```
+
+# TODO
+create github workflow
