@@ -1,4 +1,4 @@
-name: "Pull Request deploy"
+name: "build Docker Hub"
 
 on:
   pull_request:
