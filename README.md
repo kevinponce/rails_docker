@@ -32,6 +32,8 @@ docker exec -it rails_docker-db-1 psql -U postgres -d rails_docker_development <
 docker exec -it rails_docker-web-1 bin/rails db:create
 docker exec -it rails_docker-web-1 bin/rails db:migrate
 docker exec -it rails_docker-web-1 bin/rails c
+
+kompose convert -o .kubernetes/ -f docker-compose.yml
 ```
 
 # TODO
