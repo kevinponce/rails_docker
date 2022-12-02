@@ -9,11 +9,14 @@ services:
     ports:
       - "5432:5432"
   railsdocker:
-    image: kevinponce/rails_docker
-    container_name: railsdocker
+    # image: kevinponce/rails_docker
+    # container_name: railsdocker
+    build: .
     restart: always
     ports:
       - "3001:3000"
+    environment:
+      - TEST=me
     labels:
       # https://github.com/kubernetes/kompose/blob/master/docs/user-guide.md#labels
       kompose.service.type: loadbalancer # nodeport

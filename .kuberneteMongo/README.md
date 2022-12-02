@@ -13,6 +13,11 @@ brew install minikube
 minikube start --vm-driver=hyperkit
 ```
 
+### base 64 encode secrets
+```
+echo -n mongouser | base64
+```
+
 ### Apply yaml files
 ```
 kubectl apply -f .kuberneteMongo/mongo-config.yaml
@@ -42,4 +47,17 @@ kubectl logs webapp-deployment-8b9d9f448-th29j -f
 ```
 minikube ip # get the ip
 kubectl get svc # PORTS
+```
+
+### Teardown
+```
+kubectl get deployments
+
+kubectl delete deployments mongo-deployment
+kubectl delete deployments webapp-deployment
+
+kubectl get services
+
+kubectl delete service mongo-service
+kubectl delete service webapp-service
 ```
