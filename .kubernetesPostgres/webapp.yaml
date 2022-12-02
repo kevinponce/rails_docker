@@ -27,11 +27,6 @@ spec:
               key: postgres-host
         - name: POSTGRES_DB
           value: "rails_docker_development"
-        - name: DATABASE_URL
-          valueFrom:
-            configMapKeyRef:
-              name: postgres-config
-              key: postgres-url
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:

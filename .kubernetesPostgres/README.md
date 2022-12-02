@@ -1,5 +1,7 @@
 ### References
 * https://www.youtube.com/watch?v=s_o8dwzRlu4
+* https://www.youtube.com/watch?v=OVVGwc90guo
+* https://gitlab.com/codeching/kubernetes-multicontainer-application-react-nodejs-postgres-nginx/-/tree/master/
 
 ### Install
 ```
@@ -24,6 +26,7 @@ echo -n password | base64 # cGFzc3dvcmQ=
 ```
 kubectl apply -f .kubernetesPostgres/postgres-config.yaml
 kubectl apply -f .kubernetesPostgres/postgres-secret.yaml
+kubectl apply -f .kubernetesPostgres/postgres-persistent-volume.yml
 kubectl apply -f .kubernetesPostgres/postgres.yaml
 kubectl apply -f .kubernetesPostgres/webapp.yaml
 ```
