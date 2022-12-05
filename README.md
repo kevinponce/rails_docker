@@ -41,4 +41,4 @@ kompose convert -o .kubernetes/ -f docker-compose.yml
 ```
 
 # TODO
-create github workflow
+AWS k8s
