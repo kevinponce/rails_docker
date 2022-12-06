@@ -5,7 +5,7 @@ import { getInput } from "@actions/core";
   const token = getInput("token", { required: true, trimWhitespace: true })
 
   console.log({ token: token });
-  consle.log('^^^^^')
+  console.log('^^^^^')
   console.log(context);
 
   const github = getOctokit(token, {
