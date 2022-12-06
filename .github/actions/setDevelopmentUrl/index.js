@@ -22,8 +22,8 @@ import { getInput } from "@actions/core";
   console.log('$$$$$$$$$$$$$$$')
 
   const resp = await github.rest.repos.createDeployment({
-    owner: context.owner,
-    repo: context.repo,
+    owner: context.repo.owner,
+    repo: context.repo.repo,
     ref: context.ref,
   });
 
