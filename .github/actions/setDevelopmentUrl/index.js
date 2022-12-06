@@ -4,7 +4,8 @@ import { getInput } from "@actions/core";
 (async () => {
   const token = getInput("token", { required: true, trimWhitespace: true })
 
-  console.log(token);
+  console.log({ token: token });
+  consle.log('^^^^^')
   console.log(context);
 
   const github = getOctokit(token, {
@@ -15,7 +16,10 @@ import { getInput } from "@actions/core";
   console.log(deploymentID);
 
   console.log(github.rest.repos.createDeploymentStatus);
-
+  console.log(context.owner)
+  console.log(context.repo)
+  console.log(context.ref)
+  console.log('$$$$$$$$$$$$$$$')
 
   const resp = await github.rest.repos.createDeployment({
     owner: context.owner,
