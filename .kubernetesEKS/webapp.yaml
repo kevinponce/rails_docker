@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: kevinponce/rails_docker:latest
+        image: 218058844305.dkr.ecr.us-east-1.amazonaws.com/my-cool-application:b47a32a8c34f39dd08d05a52201fb262620237d6
         ports:
         - containerPort: 3000
         env:
