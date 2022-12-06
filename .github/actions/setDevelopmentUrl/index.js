@@ -21,13 +21,17 @@ import { getInput } from "@actions/core";
   console.log(context.ref)
   console.log('$$$$$$$$$$$$$$$')
 
-  const resp = await github.rest.repos.createDeployment({
+  const createDeploymentResp = await github.rest.repos.createDeployment({
     owner: context.repo.owner,
     repo: context.repo.repo,
     ref: context.ref,
   });
 
-  console.log(resp);
+  console.log(createDeploymentResp);
+
+  const deploymentID = createDeploymentResp.data.id
+
+  console.log(deploymentID);
 
 
   // github.rest.repos.createDeploymentStatus({
