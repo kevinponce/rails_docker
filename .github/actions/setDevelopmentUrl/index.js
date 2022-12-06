@@ -17,7 +17,7 @@ import { getInput } from "@actions/core";
   console.log(github.rest.repos.createDeploymentStatus);
 
 
-  const resp = await octokit.rest.repos.createDeployment({
+  const resp = await github.rest.repos.createDeployment({
     owner: context.owner,
     repo: context.repo,
     ref: context.ref,
