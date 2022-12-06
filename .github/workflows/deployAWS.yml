@@ -77,6 +77,10 @@ jobs:
       #     kubectl apply -f .kubernetesEKS/postgres.yaml
       #     kubectl apply -f .kubernetesEKS/webapp.yaml
 
+      - name: Install Set Development URL Dependencies
+        run: |
+          cd .github/actions/setDevelopmentUrl && npm install
+
       - name: Set Development URL
         uses: ./.github/actions/setDevelopmentUrl
         with:
