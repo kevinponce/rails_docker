@@ -10,6 +10,9 @@ const github = getOctokit(token, {
   previews: ["ant-man-preview", "flash-preview"],
 });
 
+const deploymentID = getInput("deployment_id", { required: false, trimWhitespace: true });
+console.log(deploymentID);
+
 console.log(github.rest.repos.createDeploymentStatus);
 
 // github.rest.repos.createDeploymentStatus({
