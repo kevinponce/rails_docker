@@ -70,5 +70,5 @@ jobs:
 
       - name: Deploy image to AWS EKS
         run: |
-          kubectl apply -f .kubernetesPostgres/aws-auth.yaml
+          kubectl apply -f .kubernetesEKS/aws-auth.yaml
 
