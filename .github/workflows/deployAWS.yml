@@ -73,5 +73,5 @@ jobs:
           kubectl apply -f .kubernetesEKS/aws-auth.yaml
           kubectl apply -f .kubernetesEKS/postgres-config.yaml
           kubectl apply -f .kubernetesEKS/postgres-secret.yaml
-          kubectl apply -f .kubernetesEKS/postgres-persistent-volume.yml
+          kubectl apply -f .kubernetesEKS/postgres-persistent-volume.yaml
           kubectl apply -f .kubernetesEKS/postgres.yaml
