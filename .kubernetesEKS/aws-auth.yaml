@@ -5,6 +5,10 @@ metadata:
   namespace: kube-system 
 data: 
   mapUsers: |
+    - userarn: arn:aws:iam::218058844305:user/KevinsLaptop
+      username: KevinsLaptop
+      groups:
+        - system:masters
     - userarn: arn:aws:iam::218058844305:user/railsDockerGitHubAction
       username: railsDockerGitHubAction
       groups:
