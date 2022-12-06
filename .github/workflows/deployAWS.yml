@@ -77,7 +77,7 @@ jobs:
       #     kubectl apply -f .kubernetesEKS/postgres.yaml
       #     kubectl apply -f .kubernetesEKS/webapp.yaml
 
-      - name: Annotate PR
+      - name: Set Development URL
         uses: ./.github/actions/setDevelopmentUrl
         with:
           owner: ${{ github.repository_owner }}

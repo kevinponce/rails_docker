@@ -15,4 +15,4 @@ inputs:
     required: true
 runs:
   using: 'node16'
-  main: './github/actions/setDevelopmentUrl/index.js'
+  main: './index.js'
