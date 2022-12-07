@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: 218058844305.dkr.ecr.us-east-1.amazonaws.com/my-cool-application:b054f93a0608e455f7ebec3c8a5953e10c06ec80
+        image: 218058844305.dkr.ecr.us-east-1.amazonaws.com/my-cool-application:cea733cba840afa3f362e99c390b22fa2437bd7a
         ports:
         - containerPort: 3000
         env:
