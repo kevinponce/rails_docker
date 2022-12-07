@@ -22,6 +22,8 @@ import { getInput } from "@actions/core";
   console.log(context.repo.owner)
   console.log('$$$$$$$$$$$$$$$')
 
+  console.log(JSON.stringify(context, null, 2))
+
   const sdf = await github.rest.repos.listDeployments({
     owner: context.repo.owner,
     repo: context.repo.repo,
