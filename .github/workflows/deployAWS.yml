@@ -56,7 +56,7 @@ jobs:
           context: .
           push: true
           # tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
-          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest_rails_docker
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
@@ -69,7 +69,6 @@ jobs:
       - name: Update kube config
         run: aws eks update-kubeconfig --name rails-docker2 --region us-east-1
 
-        # kubectl apply -f .kubernetesEKS/postgres-persistent-volume.yaml
       - name: Deploy image to AWS EKS
         run: |
           kubectl apply -f .kubernetesEKS/aws-auth.yaml
@@ -77,6 +76,7 @@ jobs:
           kubectl apply -f .kubernetesEKS/postgres-secret.yaml
           kubectl apply -f .kubernetesEKS/postgres.yaml
           kubectl apply -f .kubernetesEKS/webapp.yaml
+          kubectl set image deployment/webapp-deployment webapp=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest
 
       - name: create a github deployment
         uses: bobheadxi/deployments@v0.5.2
