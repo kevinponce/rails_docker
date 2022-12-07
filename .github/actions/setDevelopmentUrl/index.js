@@ -38,7 +38,7 @@ import { getInput } from "@actions/core";
   const createDeploymentResp = await github.rest.repos.createDeployment({
     owner,
     repo,
-    ref: sha, // context.ref,
+    ref: branch, // context.ref,
     environment: 'qa',
   });
 
