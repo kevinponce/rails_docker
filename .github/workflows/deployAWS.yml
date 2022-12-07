@@ -96,7 +96,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env_url: "https://google.com"
+          # TODO: upated to EKS
+          env_url: "http://a33114b75260c4edaa12d552fb7ac9db-1238553468.us-east-1.elb.amazonaws.com/"
 
 
       # - name: Install Set Development URL Dependencies
