@@ -13,7 +13,6 @@ spec:
     metadata:
       labels:
         app: webapp
-        test: 1
     spec:
       containers:
       - name: webapp
