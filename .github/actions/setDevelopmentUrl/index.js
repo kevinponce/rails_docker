@@ -40,11 +40,11 @@ import { getInput } from "@actions/core";
     environment: 'qa',
   });
 
-  // console.log(createDeploymentResp);
+  console.log(JSON.stringify(createDeploymentResp, null, 2))
 
-  // const deploymentID = createDeploymentResp.data.id
+  const deploymentID = createDeploymentResp.data.id
 
-  // console.log(deploymentID);
+  console.log(deploymentID);
 
   // // TODO: pass in
   // const state = "success";
@@ -67,7 +67,7 @@ import { getInput } from "@actions/core";
     // log_url: logsURL,
   });
 
-  console.log(resp)
+  console.log(JSON.stringify(resp, null, 2))
 
   // github.log.debug("test")
   // github.log.debug(resp.data.environment_url)
