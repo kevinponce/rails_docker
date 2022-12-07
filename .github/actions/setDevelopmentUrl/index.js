@@ -21,7 +21,8 @@ import { getInput } from "@actions/core";
   const createDeploymentResp = await github.rest.repos.createDeployment({
     owner: context.repo.owner,
     repo: context.repo.repo,
-    ref: context.ref,
+    ref: "test",//context.ref,
+    environment: "qa",
   });
 
   console.log(createDeploymentResp);
@@ -40,7 +41,7 @@ import { getInput } from "@actions/core";
     deployment_id: deploymentID,
     state: state,
     description: "Description will go here!",
-    ref: context.ref,
+    ref: "test", //context.ref,
     auto_inactive: true,
 
     // only set environment_url if deployment worked
