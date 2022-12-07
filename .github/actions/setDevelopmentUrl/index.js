@@ -47,8 +47,8 @@ import { getInput } from "@actions/core";
   console.log(deploymentID);
 
   // // TODO: pass in
-  // const state = "success";
-  // const environmentUrl = "https://google.com";
+  const state = "success";
+  const environmentUrl = "https://google.com";
 
   const resp = await github.rest.repos.createDeploymentStatus({
     owner: context.repo.owner,
