@@ -5,21 +5,21 @@ import { getInput } from "@actions/core";
   const token = getInput("token", { required: true, trimWhitespace: true })
 
   console.log(getInput("deployment_id", { required: false, trimWhitespace: true }));
+  console.log(getInput("branch", { required: false, trimWhitespace: true }));
 
   
 
   console.log({ token: token });
   console.log('^^^^^')
-  console.log(context);
 
   const github = getOctokit(token, {
     previews: ["ant-man-preview", "flash-preview"],
   });
 
-  console.log(github.rest.repos.createDeploymentStatus);
   console.log(context.owner)
   console.log(context.repo)
   console.log(context.ref)
+  console.log(context.repo.owner)
   console.log('$$$$$$$$$$$$$$$')
 
   const createDeploymentResp = await github.rest.repos.createDeployment({
