@@ -52,6 +52,6 @@ import { getInput } from "@actions/core";
 
   console.log(resp)
 
-  octokit.log.debug("test")
-  octokit.log.debug(resp.data.environment_url)
+  github.log.debug("test")
+  github.log.debug(resp.data.environment_url)
 })();
