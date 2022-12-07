@@ -76,9 +76,9 @@ jobs:
           kubectl apply -f .kubernetesEKS/postgres-secret.yaml
           kubectl apply -f .kubernetesEKS/postgres.yaml
           kubectl apply -f .kubernetesEKS/webapp.yaml
-          kubectl set image deployment/webapp-deployment webapp=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest
+          kubectl set image deployment/webapp-deployment webapp=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest  --record
 
-          echo "{DEPLOYMENT_URL}={kubectl get services webapp-service --output jsonpath='{.status.loadBalancer.ingress[0].hostname}'}" >> $GITHUB_ENV
+          echo "DEPLOYMENT_URL=$(kubectl get services webapp-service --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
 
       - name: create a github deployment
         uses: bobheadxi/deployments@v0.5.2
