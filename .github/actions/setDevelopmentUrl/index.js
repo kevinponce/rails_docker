@@ -22,42 +22,49 @@ import { getInput } from "@actions/core";
   console.log(context.repo.owner)
   console.log('$$$$$$$$$$$$$$$')
 
-  const createDeploymentResp = await github.rest.repos.createDeployment({
+  const sdf = await github.rest.repos.listDeployments({
     owner: context.repo.owner,
     repo: context.repo.repo,
-    ref: context.ref,
-    environment: branch, // "qa",
   });
 
-  console.log(createDeploymentResp);
+  console.log(sdf)
 
-  const deploymentID = createDeploymentResp.data.id
+  // const createDeploymentResp = await github.rest.repos.createDeployment({
+  //   owner: context.repo.owner,
+  //   repo: context.repo.repo,
+  //   ref: context.ref,
+  //   environment: branch, // "qa",
+  // });
 
-  console.log(deploymentID);
+  // console.log(createDeploymentResp);
 
-  // TODO: pass in
-  const state = "success";
-  const environmentUrl = "https://google.com";
+  // const deploymentID = createDeploymentResp.data.id
 
-  const resp = await github.rest.repos.createDeploymentStatus({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    deployment_id: deploymentID,
-    state: state,
-    description: "Description will go here!",
-    ref: context.ref,
-    auto_inactive: true,
-    environment: branch,
+  // console.log(deploymentID);
 
-    // only set environment_url if deployment worked
-    environment_url: environmentUrl,
+  // // TODO: pass in
+  // const state = "success";
+  // const environmentUrl = "https://google.com";
 
-    // set log_url to action by default
-    // log_url: logsURL,
-  });
+  // const resp = await github.rest.repos.createDeploymentStatus({
+  //   owner: context.repo.owner,
+  //   repo: context.repo.repo,
+  //   deployment_id: deploymentID,
+  //   state: state,
+  //   description: "Description will go here!",
+  //   ref: context.ref,
+  //   auto_inactive: true,
+  //   environment: branch,
 
-  console.log(resp)
+  //   // only set environment_url if deployment worked
+  //   environment_url: environmentUrl,
 
-  github.log.debug("test")
-  github.log.debug(resp.data.environment_url)
+  //   // set log_url to action by default
+  //   // log_url: logsURL,
+  // });
+
+  // console.log(resp)
+
+  // github.log.debug("test")
+  // github.log.debug(resp.data.environment_url)
 })();
