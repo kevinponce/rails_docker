@@ -77,16 +77,42 @@ jobs:
       #     kubectl apply -f .kubernetesEKS/postgres.yaml
       #     kubectl apply -f .kubernetesEKS/webapp.yaml
 
-      - name: Install Set Development URL Dependencies
-        run: |
-          cd .github/actions/setDevelopmentUrl && npm install
 
-      - name: Set Development URL
-        uses: ./.github/actions/setDevelopmentUrl
+      - name: create a github deployment
+        uses: bobheadxi/deployments@v0.5.2
+        id: deployment
         with:
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.event.repository.name }}
-          pr_number: ${{ github.event.number }}
+          step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.head_ref || github.ref_name }} 
+          env: ${{ env.STAGE }}
           ref: ${{ github.head_ref }}
+          no_override: false
+          transient: true
+
+      - name: update the github deployment status
+        uses: bobheadxi/deployments@v0.5.2
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          env_url: "https://google.com"
+
+
+
+
+
+      # - name: Install Set Development URL Dependencies
+      #   run: |
+      #     cd .github/actions/setDevelopmentUrl && npm install
+
+      # - name: Set Development URL
+      #   uses: ./.github/actions/setDevelopmentUrl
+      #   with:
+      #     owner: ${{ github.repository_owner }}
+      #     repo: ${{ github.event.repository.name }}
+      #     pr_number: ${{ github.event.number }}
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.head_ref || github.ref_name }} 
+      #     ref: ${{ github.head_ref }}
