@@ -30,22 +30,24 @@ import { getInput } from "@actions/core";
 
   console.log(deploymentID);
 
+  // TODO: pass in
+  const state = "success";
+  const environmentUrl = "https://google.com";
 
-  // github.rest.repos.createDeploymentStatus({
-  //   owner: context.owner,
-  //   repo: context.repo,
-  //   deployment_id: parseInt(stepArgs.deploymentID, 10),
-  //   state: newStatus,
-  //   description: description,
-  //   ref: context.ref,
+  const resp = await github.rest.repos.createDeploymentStatus({
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    deployment_id: deploymentID,
+    state: state,
+    description: "Description will go here!",
+    ref: context.ref,
 
-  //   // only set environment_url if deployment worked
-  //   environment_url: newStatus === "success" ? stepArgs.envURL : "",
-  //   // set log_url to action by default
-  //   log_url: logsURL,
-  //   // if we are overriding previous deployments, let GitHub deactivate past
-  //   // deployments for us as a fallback, or see if a user explicitly wants to
-  //   // use this feature.
-  //   auto_inactive: stepArgs.override || stepArgs.autoInactive,
-  // });
+    // only set environment_url if deployment worked
+    environment_url: environmentUrl,
+
+    // set log_url to action by default
+    // log_url: logsURL,
+  });
+
+  console.log(resp)
 })();
