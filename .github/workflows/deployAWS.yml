@@ -89,3 +89,4 @@ jobs:
           pr_number: ${{ github.event.number }}
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.head_ref || github.ref_name }} 
+          ref: ${{ github.head_ref }}

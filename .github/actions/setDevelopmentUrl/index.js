@@ -6,8 +6,7 @@ import { getInput } from "@actions/core";
 
   console.log(getInput("deployment_id", { required: false, trimWhitespace: true }));
   const branch = getInput("branch", { required: false, trimWhitespace: true });
-
-  
+  console.log({ ref: getInput("ref", { required: false, trimWhitespace: true }) });
 
   console.log({ token: token });
   console.log('^^^^^')
@@ -15,6 +14,9 @@ import { getInput } from "@actions/core";
   const github = getOctokit(token, {
     previews: ["ant-man-preview", "flash-preview"],
   });
+
+  const { owner, repo } = context.repo;
+  const { sha } = context
 
   console.log(context.owner)
   console.log(context.repo)
@@ -25,7 +27,7 @@ import { getInput } from "@actions/core";
   console.log(JSON.stringify(context, null, 2))
 
   // const sdf = await github.rest.repos.listDeployments({
-  //   owner: context.repo.owner,
+  //   owner,
   //   repo: context.repo.repo,
   // });
 
@@ -34,9 +36,9 @@ import { getInput } from "@actions/core";
   console.log('$$$$$$$$$')
 
   const createDeploymentResp = await github.rest.repos.createDeployment({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    ref: context.sha, // context.ref,
+    owner,
+    repo,
+    ref: sha, // context.ref,
     environment: 'qa',
   });
 
@@ -51,12 +53,12 @@ import { getInput } from "@actions/core";
   const environmentUrl = "https://google.com";
 
   const resp = await github.rest.repos.createDeploymentStatus({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
+    owner,
+    repo,
     deployment_id: deploymentID,
     state: state,
     description: "Description will go here!",
-    ref: context.sha, // context.ref,
+    ref: sha, // context.ref,
     auto_inactive: true,
     environment: branch,
 
@@ -65,6 +67,8 @@ import { getInput } from "@actions/core";
 
     // set log_url to action by default
     // log_url: logsURL,
+
+    logsURL: `https://github.com/${owner}/${repo}/commit/${sha}/checks`,
   });
 
   console.log(JSON.stringify(resp, null, 2))
