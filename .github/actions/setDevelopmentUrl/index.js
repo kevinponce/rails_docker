@@ -4,6 +4,10 @@ import { getInput } from "@actions/core";
 (async () => {
   const token = getInput("token", { required: true, trimWhitespace: true })
 
+  console.log(getInput("deployment_id", { required: false, trimWhitespace: true }));
+
+  
+
   console.log({ token: token });
   console.log('^^^^^')
   console.log(context);
@@ -21,7 +25,7 @@ import { getInput } from "@actions/core";
   const createDeploymentResp = await github.rest.repos.createDeployment({
     owner: context.repo.owner,
     repo: context.repo.repo,
-    ref: "test",//context.ref,
+    ref: context.ref,
     environment: "qa",
   });
 
@@ -41,7 +45,7 @@ import { getInput } from "@actions/core";
     deployment_id: deploymentID,
     state: state,
     description: "Description will go here!",
-    ref: "test", //context.ref,
+    ref: context.ref,
     auto_inactive: true,
 
     // only set environment_url if deployment worked
