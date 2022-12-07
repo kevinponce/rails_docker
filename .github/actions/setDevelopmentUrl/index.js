@@ -12,9 +12,6 @@ import { getInput } from "@actions/core";
     previews: ["ant-man-preview", "flash-preview"],
   });
 
-  const deploymentID = getInput("deployment_id", { required: false, trimWhitespace: true });
-  console.log(deploymentID);
-
   console.log(github.rest.repos.createDeploymentStatus);
   console.log(context.owner)
   console.log(context.repo)
