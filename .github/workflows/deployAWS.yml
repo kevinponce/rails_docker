@@ -99,7 +99,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env_url: env.DEPLOYMENT_URL
+          env_url: http://${{ env.DEPLOYMENT_URL }}
           # TODO: upated to EKS
           # env_url: "http://a33114b75260c4edaa12d552fb7ac9db-1238553468.us-east-1.elb.amazonaws.com/"
 
