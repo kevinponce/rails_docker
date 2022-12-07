@@ -39,7 +39,7 @@ spec:
               name: postgres-secret
               key: postgres-password
         - name: NOTHING
-          value: "blah"
+          value: "blahhh"
 ---
 apiVersion: v1
 kind: Service
