@@ -37,6 +37,8 @@ spec:
             secretKeyRef:
               name: postgres-secret
               key: postgres-password
+        - name: NOTHING
+          value: "blah"
 ---
 apiVersion: v1
 kind: Service
