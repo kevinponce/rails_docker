@@ -55,7 +55,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          # tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest_rails_docker
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
@@ -98,7 +99,6 @@ jobs:
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           # TODO: upated to EKS
           env_url: "http://a33114b75260c4edaa12d552fb7ac9db-1238553468.us-east-1.elb.amazonaws.com/"
-
 
       # - name: Install Set Development URL Dependencies
       #   run: |
