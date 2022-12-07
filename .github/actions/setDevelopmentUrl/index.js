@@ -41,6 +41,7 @@ import { getInput } from "@actions/core";
     state: state,
     description: "Description will go here!",
     ref: context.ref,
+    auto_inactive: true,
 
     // only set environment_url if deployment worked
     environment_url: environmentUrl,
@@ -50,4 +51,7 @@ import { getInput } from "@actions/core";
   });
 
   console.log(resp)
+
+  context.log.debug("test")
+  context.log.debug(resp.data.environment_url)
 })();
