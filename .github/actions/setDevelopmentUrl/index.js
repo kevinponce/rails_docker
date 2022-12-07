@@ -24,19 +24,21 @@ import { getInput } from "@actions/core";
 
   console.log(JSON.stringify(context, null, 2))
 
-  const sdf = await github.rest.repos.listDeployments({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-  });
-
-  console.log(sdf)
-
-  // const createDeploymentResp = await github.rest.repos.createDeployment({
+  // const sdf = await github.rest.repos.listDeployments({
   //   owner: context.repo.owner,
   //   repo: context.repo.repo,
-  //   ref: context.ref,
-  //   environment: branch, // "qa",
   // });
+
+  // console.log(sdf)
+
+  console.log('$$$$$$$$$')
+
+  const createDeploymentResp = await github.rest.repos.createDeployment({
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    ref: context.sha, // context.ref,
+    environment: 'qa',
+  });
 
   // console.log(createDeploymentResp);
 
@@ -48,24 +50,24 @@ import { getInput } from "@actions/core";
   // const state = "success";
   // const environmentUrl = "https://google.com";
 
-  // const resp = await github.rest.repos.createDeploymentStatus({
-  //   owner: context.repo.owner,
-  //   repo: context.repo.repo,
-  //   deployment_id: deploymentID,
-  //   state: state,
-  //   description: "Description will go here!",
-  //   ref: context.ref,
-  //   auto_inactive: true,
-  //   environment: branch,
+  const resp = await github.rest.repos.createDeploymentStatus({
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    deployment_id: deploymentID,
+    state: state,
+    description: "Description will go here!",
+    ref: context.sha, // context.ref,
+    auto_inactive: true,
+    environment: branch,
 
-  //   // only set environment_url if deployment worked
-  //   environment_url: environmentUrl,
+    // only set environment_url if deployment worked
+    environment_url: environmentUrl,
 
-  //   // set log_url to action by default
-  //   // log_url: logsURL,
-  // });
+    // set log_url to action by default
+    // log_url: logsURL,
+  });
 
-  // console.log(resp)
+  console.log(resp)
 
   // github.log.debug("test")
   // github.log.debug(resp.data.environment_url)
