@@ -6,10 +6,6 @@ import { getInput } from "@actions/core";
 
   console.log(getInput("deployment_id", { required: false, trimWhitespace: true }));
   const branch = getInput("branch", { required: false, trimWhitespace: true });
-  console.log({ ref: getInput("ref", { required: false, trimWhitespace: true }) });
-
-  console.log({ token: token });
-  console.log('^^^^^')
 
   const github = getOctokit(token, {
     previews: ["ant-man-preview", "flash-preview"],
@@ -17,12 +13,6 @@ import { getInput } from "@actions/core";
 
   const { owner, repo } = context.repo;
   const { sha } = context
-
-  console.log(context.owner)
-  console.log(context.repo)
-  console.log(context.ref)
-  console.log(context.repo.owner)
-  console.log('$$$$$$$$$$$$$$$')
 
   console.log(JSON.stringify(context, null, 2))
 
@@ -41,11 +31,9 @@ import { getInput } from "@actions/core";
     ref: branch, // context.ref,
     environment: 'qa',
   });
-
   console.log(JSON.stringify(createDeploymentResp, null, 2))
 
   const deploymentID = createDeploymentResp.data.id
-
   console.log(deploymentID);
 
   // // TODO: pass in
@@ -70,7 +58,6 @@ import { getInput } from "@actions/core";
 
     logsURL: `https://github.com/${owner}/${repo}/commit/${sha}/checks`,
   });
-
   console.log(JSON.stringify(resp, null, 2))
 
   // github.log.debug("test")
