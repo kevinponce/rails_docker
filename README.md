@@ -26,10 +26,19 @@ docker compose build
 docker compose up
 docker compose run web bin/rails c
 
+docker container ls # use name for commands below
+
 docker exec -it rails_docker-db-1 psql -U postgres
 docker exec -it rails_docker-db-1 psql -U postgres -d rails_docker_development < backup.sql
 
 docker exec -it rails_docker-web-1 bin/rails db:create
 docker exec -it rails_docker-web-1 bin/rails db:migrate
 docker exec -it rails_docker-web-1 bin/rails c
+
+docker exec -it rails_docker-railsdocker-1 bin/rails c
+
+kompose convert -o .kubernetes/ -f docker-compose.yml
 ```
+
+# TODO
+AWS k8s

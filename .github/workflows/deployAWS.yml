@@ -1,0 +1,115 @@
+name: "Deploy AWS"
+
+on:
+  pull_request:
+    types: [labeled, opened, synchronize]
+env:
+  RELEASE_REVISION: "pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}"
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+  KUBE_NAMESPACE: production
+  ECR_REPOSITORY: my-cool-application
+jobs:
+  deploy:
+    if: |
+      (github.event.action == 'labeled' && github.event.label.name == ':rocket: deploy') ||
+      (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, ':rocket: deploy'))
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: inject slug/short variables
+        uses: rlespinasse/github-slug-action@v4.x
+
+      - name: set STAGE variable in environment for next steps
+        run: echo "STAGE=pr-${{ github.event.number }}-${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Docker cache layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-single-buildx
+
+      - name: Build
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          # tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest_rails_docker
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.21.3' # default is latest stable
+        id: install
+
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name rails-docker2 --region us-east-1
+
+        # kubectl apply -f .kubernetesEKS/postgres-persistent-volume.yaml
+      - name: Deploy image to AWS EKS
+        run: |
+          kubectl apply -f .kubernetesEKS/aws-auth.yaml
+          kubectl apply -f .kubernetesEKS/postgres-config.yaml
+          kubectl apply -f .kubernetesEKS/postgres-secret.yaml
+          kubectl apply -f .kubernetesEKS/postgres.yaml
+          kubectl apply -f .kubernetesEKS/webapp.yaml
+
+      - name: create a github deployment
+        uses: bobheadxi/deployments@v0.5.2
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: ${{ env.STAGE }}
+          ref: ${{ github.head_ref }}
+          no_override: false
+          transient: true
+
+      - name: update the github deployment status
+        uses: bobheadxi/deployments@v0.5.2
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          # TODO: upated to EKS
+          env_url: "http://a33114b75260c4edaa12d552fb7ac9db-1238553468.us-east-1.elb.amazonaws.com/"
+
+      # - name: Install Set Development URL Dependencies
+      #   run: |
+      #     cd .github/actions/setDevelopmentUrl && npm install
+
+      # - name: Set Development URL
+      #   uses: ./.github/actions/setDevelopmentUrl
+      #   with:
+      #     owner: ${{ github.repository_owner }}
+      #     repo: ${{ github.event.repository.name }}
+      #     pr_number: ${{ github.event.number }}
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.head_ref || github.ref_name }} 
+      #     ref: ${{ github.head_ref }}
