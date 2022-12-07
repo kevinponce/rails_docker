@@ -56,7 +56,7 @@ jobs:
           context: .
           push: true
           # tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
-          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest2
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
@@ -76,7 +76,7 @@ jobs:
           kubectl apply -f .kubernetesEKS/postgres-secret.yaml
           kubectl apply -f .kubernetesEKS/postgres.yaml
           kubectl apply -f .kubernetesEKS/webapp.yaml
-          kubectl set image deployment/webapp-deployment webapp=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest  --record
+          kubectl set image deployment/webapp-deployment webapp=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest2  --record
 
           echo "DEPLOYMENT_URL=$(kubectl get services webapp-service --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
 
@@ -100,8 +100,6 @@ jobs:
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env_url: http://${{ env.DEPLOYMENT_URL }}
-          # TODO: upated to EKS
-          # env_url: "http://a33114b75260c4edaa12d552fb7ac9db-1238553468.us-east-1.elb.amazonaws.com/"
 
       # - name: Install Set Development URL Dependencies
       #   run: |
