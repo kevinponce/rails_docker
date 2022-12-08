@@ -41,5 +41,7 @@ kompose convert -o .kubernetes/ -f docker-compose.yml
 ```
 
 # TODO
+namespace
+destroy
 Add dynamodb to testing eks
 Add redshift to testing eks
