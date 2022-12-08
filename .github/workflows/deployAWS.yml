@@ -77,9 +77,9 @@ jobs:
       - name: Check if namespace exists
         run: |
           if [[ $(kubectl get namespace ${{ env.BRANCH }} --ignore-not-found=true) ]]; then
-            echo "CREATE_NAMESPACE=false >> $GITHUB_ENV
+            echo "CREATE_NAMESPACE=false" >> $GITHUB_ENV
           else
-            echo "CREATE_NAMESPACE=true >> $GITHUB_ENV
+            echo "CREATE_NAMESPACE=true" >> $GITHUB_ENV
           fi
 
       - name: Create namespace
