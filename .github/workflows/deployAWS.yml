@@ -55,10 +55,9 @@ jobs:
         with:
           context: .
           push: true
-          # tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
           tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest3
-          # cache-from: type=local,src=/tmp/.buildx-cache
-          # cache-to: type=local,dest=/tmp/.buildx-cache-new
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v3
@@ -77,7 +76,6 @@ jobs:
           kubectl apply -f .kubernetesEKS/postgres.yaml
           kubectl apply -f .kubernetesEKS/webapp.yaml
 
-          # kubectl set image deployment webapp-deployment webapp=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}  --record
           kubectl set image deployment webapp-deployment webapp=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest3  --record
           kubectl set env deployment webapp-deployment NOTHING=$( date "+%Y-%m-%d_%H:%M:%S" )
 
