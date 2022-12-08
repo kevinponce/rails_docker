@@ -8,9 +8,8 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
-  KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-  KUBE_NAMESPACE: production
   ECR_REPOSITORY: my-cool-application
+  EKS_NAME: rails-docker2
 jobs:
   deploy:
     if: |
@@ -19,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # TODO: might no longer need
       - name: inject slug/short variables
         uses: rlespinasse/github-slug-action@v4.x
 
@@ -54,7 +54,7 @@ jobs:
         run: echo "BRANCH=${{ github.head_ref || github.ref_name }}" >> $GITHUB_ENV
 
       - name: Set ECR Path
-        run: echo "ECR_PATH=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.BRANCH }}_latest3" >> $GITHUB_ENV
+        run: echo "ECR_PATH=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.BRANCH }}_latest" >> $GITHUB_ENV
 
       - name: Build/Deploy Docker Image
         uses: docker/build-push-action@v2
@@ -72,7 +72,7 @@ jobs:
         id: install
 
       - name: Update kube config
-        run: aws eks update-kubeconfig --name rails-docker2 --region us-east-1
+        run: aws eks update-kubeconfig --name ${{ env.EKS_NAME }} --region ${{ env.AWS_REGION }}
 
       - name: Create namespace
         run: kubectl create namespace ${{ env.BRANCH }} --dry-run=client -o yaml | kubectl apply -f -
