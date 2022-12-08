@@ -74,7 +74,7 @@ jobs:
       - name: Update kube config
         run: aws eks update-kubeconfig --name ${{ env.EKS_NAME }} --region ${{ env.AWS_REGION }}
 
-      - name: Deploy image to AWS EKS
+      - name: Check if namespace exists
         run: |
           if [[ $(kubectl get namespace ${{ env.BRANCH }} --ignore-not-found=true) ]]; then
             echo "CREATE_NAMESPACE=false >> $GITHUB_ENV
@@ -94,7 +94,7 @@ jobs:
 
       - name: Create Webapp
         run: |
-          if [[ ${ env.CREATE_NAMESPACE }]]
+          if [[ ${ env.CREATE_NAMESPACE }]]; then
             # wait to make sure we can set the url on the pull request
             kubectl apply -f .kubernetesEKS/webapp.yaml --namespace=${{ env.BRANCH }} --wait=true
           else
