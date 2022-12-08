@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: 218058844305.dkr.ecr.us-east-1.amazonaws.com/my-cool-application:latest_rails_docker
+        image: 218058844305.dkr.ecr.us-east-1.amazonaws.com/my-cool-application:set_eks_image_name_latest
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
@@ -39,7 +39,7 @@ spec:
               name: postgres-secret
               key: postgres-password
         - name: NOTHING
-          value: "blahhh"
+          value: "blahhhhh"
 ---
 apiVersion: v1
 kind: Service

@@ -14,19 +14,11 @@ spec:
       labels:
         app: postgres
     spec:
-      # volumes:
-      #   - name: postgres-storage
-      #     persistentVolumeClaim:
-      #       claimName: postgres-persistent-volume
       containers:
         - name: postgres
           image: postgres:15.1
           ports:
             - containerPort: 5432
-          # volumeMounts:
-          #   - name: postgres-storage
-          #     mountPath: /var/lib/postgresql/data
-          #     subPath: postgres
           env:
           - name: POSTGRES_DB
             value: rails_docker_development
