@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: 218058844305.dkr.ecr.us-east-1.amazonaws.com/my-cool-application:set_eks_image_name_latest2
+        image: 218058844305.dkr.ecr.us-east-1.amazonaws.com/my-cool-application:set_eks_image_name_latest3
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
