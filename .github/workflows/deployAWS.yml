@@ -79,16 +79,20 @@ jobs:
 
       - name: Deploy image to AWS EKS
         run: |
-          kubectl apply -f .kubernetesEKS/aws-auth.yaml
-          kubectl apply -f .kubernetesEKS/postgres-config.yaml
-          kubectl apply -f .kubernetesEKS/postgres-secret.yaml
-          kubectl apply -f .kubernetesEKS/postgres.yaml
-          kubectl apply -f .kubernetesEKS/webapp.yaml
+          kubectl apply -f .kubernetesEKS/aws-auth.yaml --namespace=${{ env.BRANCH }}
+          kubectl apply -f .kubernetesEKS/postgres-config.yaml --namespace=${{ env.BRANCH }}
+          kubectl apply -f .kubernetesEKS/postgres-secret.yaml --namespace=${{ env.BRANCH }}
+          kubectl apply -f .kubernetesEKS/postgres.yaml --namespace=${{ env.BRANCH }}
+          kubectl apply -f .kubernetesEKS/webapp.yaml --namespace=${{ env.BRANCH }}
 
-          kubectl set image deployment webapp-deployment webapp=${{ env.ECR_PATH }}  --record
-          kubectl set env deployment webapp-deployment NOTHING=$( date "+%Y-%m-%d_%H:%M:%S" )
+          # assigns the branch image ecr path
+          kubectl set image deployment webapp-deployment webapp=${{ env.ECR_PATH }}  --record  --namespace=${{ env.BRANCH }}
 
-          echo "DEPLOYMENT_URL=$(kubectl get services webapp-service --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
+          # assigns a env variable to force udpate webapp-deployment
+          kubectl set env deployment webapp-deployment NOTHING=$( date "+%Y-%m-%d_%H:%M:%S" )  --namespace=${{ env.BRANCH }}
+
+      - name: Set DEPLOYMENT_URL
+        run: echo "DEPLOYMENT_URL=$(kubectl get services webapp-service  --namespace=${{ env.BRANCH }} --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
 
       - name: create a github deployment
         uses: bobheadxi/deployments@v0.5.2
