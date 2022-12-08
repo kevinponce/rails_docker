@@ -56,7 +56,7 @@ jobs:
           context: .
           push: true
           # tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
-          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest2
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest3
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
@@ -78,7 +78,7 @@ jobs:
           kubectl apply -f .kubernetesEKS/webapp.yaml
 
           # kubectl set image deployment webapp-deployment webapp=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}  --record
-          kubectl set image deployment webapp-deployment webapp=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest2  --record --image-pull-policy='Always'
+          kubectl set image deployment webapp-deployment webapp=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest3  --record
 
           echo "DEPLOYMENT_URL=$(kubectl get services webapp-service --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
 
