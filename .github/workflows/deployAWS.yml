@@ -50,12 +50,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-single-buildx
 
+      - name: Set Branch Name
+        run: echo "BRANCH=$(github.head_ref || github.ref_name)" >> $GITHUB_ENV
+
+      - name: Set ECR Path
+        run: echo "ECR_PATH=$( steps.login-ecr.outputs.registry )/$( env.ECR_REPOSITORY ):$( env.BRANCH )_latest3" >> $GITHUB_ENV
+
       - name: Build/Deploy Docker Image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest3
+          tags: ${{ env.ECR_PATH }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
@@ -68,6 +74,9 @@ jobs:
       - name: Update kube config
         run: aws eks update-kubeconfig --name rails-docker2 --region us-east-1
 
+      - name: Create namespace
+        run: kubectl create namespace ${{ env.BRANCH }} --dry-run=client -o yaml | kubectl apply -f -
+
       - name: Deploy image to AWS EKS
         run: |
           kubectl apply -f .kubernetesEKS/aws-auth.yaml
@@ -76,7 +85,7 @@ jobs:
           kubectl apply -f .kubernetesEKS/postgres.yaml
           kubectl apply -f .kubernetesEKS/webapp.yaml
 
-          kubectl set image deployment webapp-deployment webapp=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest3  --record
+          kubectl set image deployment webapp-deployment webapp=${{ env.ECR_PATH }}  --record
           kubectl set env deployment webapp-deployment NOTHING=$( date "+%Y-%m-%d_%H:%M:%S" )
 
           echo "DEPLOYMENT_URL=$(kubectl get services webapp-service --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
