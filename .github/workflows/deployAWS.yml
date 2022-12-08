@@ -79,6 +79,7 @@ jobs:
 
           # kubectl set image deployment webapp-deployment webapp=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}  --record
           kubectl set image deployment webapp-deployment webapp=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.head_ref || github.ref_name }}_latest3  --record
+          kubectl set env deployment webapp-deployment NOTHING=${{ date "+%Y-%m-%d_%H:%M:%S" }}
 
           echo "DEPLOYMENT_URL=$(kubectl get services webapp-service --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
 
