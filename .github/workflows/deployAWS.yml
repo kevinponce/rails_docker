@@ -94,7 +94,7 @@ jobs:
 
       - name: Create Webapp
         run: |
-          if [[ ${ env.CREATE_NAMESPACE }]]; then
+          if [[ ${{ env.CREATE_NAMESPACE }} ]]; then
             # wait to make sure we can set the url on the pull request
             kubectl apply -f .kubernetesEKS/webapp.yaml --namespace=${{ env.BRANCH }} --wait=true
           else
