@@ -31,7 +31,7 @@ jobs:
       - name: Set Branch Name
         run: echo "BRANCH=${{ github.head_ref || github.ref_name }}" >> $GITHUB_ENV
 
-      - name: Set Branch Name
+      - name: Validate Branch Name
         run: |
           if ! [[ ${{ env.BRANCH }} =~ ^[a-z0-9]([-a-z0-9]*[a-z0-9])$ ]]; then
             echo "Invalid value: \"${{ env.BRANCH }}\"";
