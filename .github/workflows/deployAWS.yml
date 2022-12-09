@@ -106,7 +106,7 @@ jobs:
         run: |
           if [[ ${{ env.CREATE_NAMESPACE }} ]]; then
             # wait to make sure we can set the url on the pull request
-            kubectl apply -f .kubernkubernetes/qaetesEKS/webapp.yaml --namespace=${{ env.BRANCH }} --wait=true
+            kubectl apply -f .kubernetes/qa/webapp.yaml --namespace=${{ env.BRANCH }} --wait=true
           else
             kubectl apply -f .kubernetes/qa/webapp.yaml --namespace=${{ env.BRANCH }}
           fi
