@@ -18,10 +18,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # TODO: might no longer need
-      # - name: inject slug/short variables
-      #   uses: rlespinasse/github-slug-action@v4.x
-
       - name: set STAGE variable in environment for next steps
         run: echo "STAGE=pr-${{ github.event.number }}-${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
 
