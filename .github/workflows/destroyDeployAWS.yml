@@ -40,5 +40,5 @@ jobs:
       - name: Update kube config
         run: aws eks update-kubeconfig --name ${{ env.EKS_NAME }} --region ${{ env.AWS_REGION }}
 
-      - name: Create namespace
+      - name: Delete namespace
         run: kubectl delete namespace ${{ env.BRANCH }}
