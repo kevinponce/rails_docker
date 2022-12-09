@@ -19,14 +19,27 @@ jobs:
 
     steps:
       # TODO: might no longer need
-      - name: inject slug/short variables
-        uses: rlespinasse/github-slug-action@v4.x
+      # - name: inject slug/short variables
+      #   uses: rlespinasse/github-slug-action@v4.x
 
       - name: set STAGE variable in environment for next steps
         run: echo "STAGE=pr-${{ github.event.number }}-${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Set Branch Name
+        run: echo "BRANCH=${{ github.head_ref || github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Set Branch Name
+        run: |
+          if ! [[ ${{ env.BRANCH }} =~ ^[a-z0-9]([-a-z0-9]*[a-z0-9])$ ]]; then
+            echo "Invalid value: \"${{ env.BRANCH }}\"";
+            echo "label must consist of lower case alphanumeric characters or '-',"
+            echo "and must start and end with an alphanumeric character";
+            echo "(e.g. 'my-name',  or '123-abc', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?')";
+            exit 1
+          fi
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -49,9 +62,6 @@ jobs:
           key: ${{ runner.os }}-single-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-single-buildx
-
-      - name: Set Branch Name
-        run: echo "BRANCH=${{ github.head_ref || github.ref_name }}" >> $GITHUB_ENV
 
       - name: Set ECR Path
         run: echo "ECR_PATH=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.BRANCH }}_latest" >> $GITHUB_ENV
@@ -87,18 +97,18 @@ jobs:
 
       - name: Deploy image to AWS EKS
         run: |
-          kubectl apply -f .kubernetesEKS/aws-auth.yaml
-          kubectl apply -f .kubernetesEKS/postgres-config.yaml --namespace=${{ env.BRANCH }}
-          kubectl apply -f .kubernetesEKS/postgres-secret.yaml --namespace=${{ env.BRANCH }}
-          kubectl apply -f .kubernetesEKS/postgres.yaml --namespace=${{ env.BRANCH }}
+          kubectl apply -f .kubernetes/qa/aws-auth.yaml
+          kubectl apply -f .kubernetes/qa/postgres-config.yaml --namespace=${{ env.BRANCH }}
+          kubectl apply -f .kubernetes/qa/postgres-secret.yaml --namespace=${{ env.BRANCH }}
+          kubectl apply -f .kubernetes/qa/postgres.yaml --namespace=${{ env.BRANCH }}
 
       - name: Create Webapp
         run: |
           if [[ ${{ env.CREATE_NAMESPACE }} ]]; then
             # wait to make sure we can set the url on the pull request
-            kubectl apply -f .kubernetesEKS/webapp.yaml --namespace=${{ env.BRANCH }} --wait=true
+            kubectl apply -f .kubernkubernetes/qaetesEKS/webapp.yaml --namespace=${{ env.BRANCH }} --wait=true
           else
-            kubectl apply -f .kubernetesEKS/webapp.yaml --namespace=${{ env.BRANCH }}
+            kubectl apply -f .kubernetes/qa/webapp.yaml --namespace=${{ env.BRANCH }}
           fi
 
           # assigns the branch image ecr path
