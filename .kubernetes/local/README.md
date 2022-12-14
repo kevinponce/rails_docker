@@ -58,7 +58,7 @@ aws dynamodb list-tables --endpoint-url http://192.168.64.2:30433
 ### Access container shell
 ```
 kubectl get pods
-kubectl exec -it pod/webapp-deployment-64fbc66499-5lfns -- /bin/sh
+kubectl exec -it pod/webapp-deployment-b7ff9c6c6-kzcrj -- /bin/sh
 bin/rails c
 ```
 

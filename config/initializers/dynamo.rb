@@ -95,7 +95,6 @@ class Dynamo
       "title": "The Big Movie",
     })
 =end
-# Dynamo.client.get_item({ table_name: 'test', key: { "year": 1985, "title": "The Big Movie" } })
     def get_item(key)
       Dynamo.client.get_item({
         table_name: table_name,
