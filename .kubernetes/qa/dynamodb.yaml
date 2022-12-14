@@ -21,8 +21,6 @@ spec:
             - -jar
             - DynamoDBLocal.jar
             - -sharedDb
-            - -dbPath
-            - /home/dynamodblocal/data/
           image: amazon/dynamodb-local
           name: dynamodb
           ports:
