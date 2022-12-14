@@ -18,10 +18,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # TODO: might no longer need
-      # - name: inject slug/short variables
-      #   uses: rlespinasse/github-slug-action@v4.x
-
       - name: set STAGE variable in environment for next steps
         run: echo "STAGE=pr-${{ github.event.number }}-${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
 
@@ -98,9 +94,12 @@ jobs:
       - name: Deploy image to AWS EKS
         run: |
           kubectl apply -f .kubernetes/qa/aws-auth.yaml
+
           kubectl apply -f .kubernetes/qa/postgres-config.yaml --namespace=${{ env.BRANCH }}
           kubectl apply -f .kubernetes/qa/postgres-secret.yaml --namespace=${{ env.BRANCH }}
           kubectl apply -f .kubernetes/qa/postgres.yaml --namespace=${{ env.BRANCH }}
+
+          kubectl apply -f .kubernetes/qa/dynamodb.yaml --namespace=${{ env.BRANCH }}
 
       - name: Create Webapp
         run: |

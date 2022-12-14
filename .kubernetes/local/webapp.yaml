@@ -17,6 +17,7 @@ spec:
       containers:
       - name: webapp
         image: kevinponce/rails_docker:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
         env:
@@ -37,6 +38,8 @@ spec:
             secretKeyRef:
               name: postgres-secret
               key: postgres-password
+        - name: BLAH
+          value: "blahhhhh"
 ---
 apiVersion: v1
 kind: Service

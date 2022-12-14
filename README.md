@@ -41,6 +41,10 @@ kompose convert -o .kubernetes/ -f docker-compose.yml
 ```
 
 # TODO
-* fix branch naming issues because it did not allow _ in the branch name...
+* fix db name
+* add redis
+* add resque
 * Add dynamodb to testing eks
 * Add redshift to testing eks
+* delete `.kubernetesMongo`
+* seed database

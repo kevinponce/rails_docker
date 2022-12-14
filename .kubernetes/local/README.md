@@ -22,24 +22,44 @@ echo -n postgres | base64 # cG9zdGdyZXM=
 echo -n password | base64 # cGFzc3dvcmQ=
 ```
 
+## Build Docker Image
+```
+docker build -t kevinponce/rails_docker .
+docker push kevinponce/rails_docker
+```
+
 ### Apply yaml files
 ```
-kubectl apply -f .kubernetesPostgres/postgres-config.yaml
-kubectl apply -f .kubernetesPostgres/postgres-secret.yaml
-kubectl apply -f .kubernetesPostgres/postgres-persistent-volume.yml
-kubectl apply -f .kubernetesPostgres/postgres.yaml
-kubectl apply -f .kubernetesPostgres/webapp.yaml
+kubectl get all
+kubectl apply -f .kubernetes/local/postgres-config.yaml
+kubectl apply -f .kubernetes/local/postgres-secret.yaml
+kubectl apply -f .kubernetes/local/postgres-persistent-volume.yaml
+kubectl apply -f .kubernetes/local/postgres.yaml
+
+kubectl apply -f .kubernetes/local/dynamodb-persistent-volume.yaml
+kubectl apply -f .kubernetes/local/dynamodb-config.yaml
+kubectl apply -f .kubernetes/local/dynamodb.yaml
+
+kubectl apply -f .kubernetes/local/webapp.yaml
 ```
 
 ### Debug
 ```
 kubectl get pods
 kubectl describe pod mongo-deployment-795bcf459d-q5m8v
+kubectl exec pod/webapp-deployment-64fbc66499-5lfns printenv
+```
+
+#### dynamodb cli test
+```
+aws dynamodb list-tables --endpoint-url http://192.168.64.2:30433
 ```
 
 ### Access container shell
 ```
-kubectl exec -it pod/webapp-deployment-65d4754f9d-5btbf -- /bin/sh
+kubectl get pods
+kubectl exec -it pod/webapp-deployment-64fbc66499-5lfns -- /bin/sh
+bin/rails c
 ```
 
 ### Logs

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dynamodb-deployment
+  labels:
+    app: dynamodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dynamodb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: dynamodb
+    spec:
+      containers:
+        - args:
+            - -jar
+            - DynamoDBLocal.jar
+            - -sharedDb
+            - -dbPath
+            - /home/dynamodblocal/data/
+          image: amazon/dynamodb-local
+          name: dynamodb
+          ports:
+            - containerPort: 8000
+          resources: {}
+      hostname: dynamodb
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dynamodb-service
+spec:
+  type: NodePort
+  selector:
+    app: dynamodb
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort: 30433

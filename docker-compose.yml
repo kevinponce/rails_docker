@@ -8,6 +8,16 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
+  dynamodb:
+    image:  amazon/dynamodb-local
+    container_name: my-dynamodb
+    hostname: dynamodb
+    restart: always
+    volumes:
+      -  ./my-dynamodb-data:/home/dynamodblocal/data
+    ports:
+      - 8000:8000
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal/data/"
   railsdocker:
     # image: kevinponce/rails_docker
     # container_name: railsdocker
@@ -19,7 +29,8 @@ services:
       - TEST=me
     labels:
       # https://github.com/kubernetes/kompose/blob/master/docs/user-guide.md#labels
-      kompose.service.type: loadbalancer # nodeport
+      kompose.service.type: nodeport
       kompose.service.nodeport.port: 30000
     depends_on:
       - db
+      - dynamodb
