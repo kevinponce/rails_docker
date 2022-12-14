@@ -2,8 +2,9 @@ class HomeController < ApplicationController
   before_action :create_dynamo_table!
 
   def index
-    @page_count = current_count('home', 'index') + 1
-    save_count!('home', 'index', @page_count)
+    # @page_count = current_count('home', 'index') + 1
+    # save_count!('home', 'index', @page_count)
+    @page_count = test('home', 'index').inspect
   end
 
   private
@@ -36,6 +37,13 @@ class HomeController < ApplicationController
         write_capacity_units: 10
       }
     )
+  end
+
+  def test(controller, method)
+    Dynamo::Table.new(table_name).get_item({
+      "controller": controller,
+      "method": method,
+    }).item
   end
 
   def current_count(controller, method)
