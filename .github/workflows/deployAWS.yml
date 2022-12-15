@@ -120,7 +120,8 @@ jobs:
         run: |
           # zero test
           timeout=240
-          while [ -z "env.DEPLOYMENT_URL" ];
+          echo $env.DEPLOYMENT_URL
+          while [ -z "$env.DEPLOYMENT_URL" ];
           do
             echo "DEPLOYMENT_URL=$(kubectl get services webapp-service --namespace=${{ env.BRANCH }} --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
             sleep 1;
