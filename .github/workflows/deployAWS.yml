@@ -104,15 +104,15 @@ jobs:
 
       - name: Deploy image to AWS EKS
         run: |
-          kubectl apply -f .kubernetes/qa/aws-auth.yaml
+          kubectl apply -f .kubernetes/qa/aws-auth.yaml --wait=true
 
-          kubectl apply -f .kubernetes/qa/postgres-config.yaml --namespace=${{ env.BRANCH }}
-          kubectl apply -f .kubernetes/qa/postgres-secret.yaml --namespace=${{ env.BRANCH }}
-          kubectl apply -f .kubernetes/qa/postgres.yaml --namespace=${{ env.BRANCH }}
+          kubectl apply -f .kubernetes/qa/postgres-config.yaml --namespace=${{ env.BRANCH }} --wait=true
+          kubectl apply -f .kubernetes/qa/postgres-secret.yaml --namespace=${{ env.BRANCH }} --wait=true
+          kubectl apply -f .kubernetes/qa/postgres.yaml --namespace=${{ env.BRANCH }} --wait=true
 
-          kubectl apply -f .kubernetes/qa/dynamodb.yaml --namespace=${{ env.BRANCH }}
+          kubectl apply -f .kubernetes/qa/dynamodb.yaml --namespace=${{ env.BRANCH }} --wait=true
 
-          kubectl apply -f .kubernetes/qa/s3.yaml --namespace=${{ env.BRANCH }}
+          kubectl apply -f .kubernetes/qa/s3.yaml --namespace=${{ env.BRANCH }} --wait=true
 
       - name: Create Webapp
         run: |
@@ -120,7 +120,7 @@ jobs:
             # wait to make sure we can set the url on the pull request
             kubectl apply -f .kubernetes/qa/webapp.yaml --namespace=${{ env.BRANCH }} --wait=true
           else
-            kubectl apply -f .kubernetes/qa/webapp.yaml --namespace=${{ env.BRANCH }}
+            kubectl apply -f .kubernetes/qa/webapp.yaml --namespace=${{ env.BRANCH }} --wait=true
           fi
 
           # assigns the branch image ecr path
