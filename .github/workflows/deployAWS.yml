@@ -37,6 +37,17 @@ jobs:
             exit 1
           fi
 
+      - name: create a github deployment
+        uses: bobheadxi/deployments@v0.5.2
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: ${{ env.STAGE }}
+          ref: ${{ github.head_ref }}
+          no_override: false
+          transient: true
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -120,17 +131,6 @@ jobs:
 
       - name: Set DEPLOYMENT_URL
         run: echo "DEPLOYMENT_URL=$(kubectl get services webapp-service --namespace=${{ env.BRANCH }} --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
-
-      - name: create a github deployment
-        uses: bobheadxi/deployments@v0.5.2
-        id: deployment
-        with:
-          step: start
-          token: ${{ secrets.GITHUB_TOKEN }}
-          env: ${{ env.STAGE }}
-          ref: ${{ github.head_ref }}
-          no_override: false
-          transient: true
 
       - name: update the github deployment status
         uses: bobheadxi/deployments@v0.5.2
