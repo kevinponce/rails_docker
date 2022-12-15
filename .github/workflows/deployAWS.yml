@@ -119,12 +119,12 @@ jobs:
       - name: Set DEPLOYMENT_URL
         run: |
           # zero test
-          timeout=240
+          timeout=60
           echo "${{ env.DEPLOYMENT_URL }}"
-          while [ -z "${{ env.DEPLOYMENT_URL }}" ];
+          while [ -z "$DEPLOYMENT_URL" ];
           do
-            echo "DEPLOYMENT_URL=$(kubectl get services webapp-service --namespace=${{ env.BRANCH }} --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
-            sleep 1;
+            DEPLOYMENT_URL=$(kubectl get services webapp-service --namespace=${{ env.BRANCH }} --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            echo "DEPLOYMENT_URL=$DEPLOYMENT_URL" >> $GITHUB_ENV
 
             ((timeout--))
 
@@ -132,6 +132,8 @@ jobs:
               echo "ERROR: Timeout while waiting for DEPLOYMENT_URL"
               exit 1
             fi
+
+            sleep 1;
           done;
 
       - name: update the github deployment status
