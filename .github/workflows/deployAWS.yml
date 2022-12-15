@@ -91,14 +91,6 @@ jobs:
       - name: Update kube config
         run: aws eks update-kubeconfig --name ${{ env.EKS_NAME }} --region ${{ env.AWS_REGION }}
 
-      - name: Check if namespace exists
-        run: |
-          if [[ $(kubectl get namespace ${{ env.BRANCH }} --ignore-not-found=true) ]]; then
-            echo "CREATE_NAMESPACE=false" >> $GITHUB_ENV
-          else
-            echo "CREATE_NAMESPACE=true" >> $GITHUB_ENV
-          fi
-
       - name: Create namespace
         run: kubectl create namespace ${{ env.BRANCH }} --dry-run=client -o yaml | kubectl apply -f -
 
@@ -116,12 +108,7 @@ jobs:
 
       - name: Create Webapp
         run: |
-          if [[ ${{ env.CREATE_NAMESPACE }} ]]; then
-            # wait to make sure we can set the url on the pull request
-            kubectl apply -f .kubernetes/qa/webapp.yaml --namespace=${{ env.BRANCH }} --wait=true
-          else
-            kubectl apply -f .kubernetes/qa/webapp.yaml --namespace=${{ env.BRANCH }} --wait=true
-          fi
+          kubectl apply -f .kubernetes/qa/webapp.yaml --namespace=${{ env.BRANCH }} --wait=true
 
           # assigns the branch image ecr path
           kubectl set image deployment webapp-deployment webapp=${{ env.ECR_PATH }} --record --namespace=${{ env.BRANCH }}
@@ -130,7 +117,21 @@ jobs:
           kubectl set env deployment webapp-deployment NOTHING=$( date "+%Y-%m-%d_%H:%M:%S" ) --namespace=${{ env.BRANCH }}
 
       - name: Set DEPLOYMENT_URL
-        run: echo "DEPLOYMENT_URL=$(kubectl get services webapp-service --namespace=${{ env.BRANCH }} --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
+        run: |
+          # zero test
+          timeout=240
+          while [ -z "env.DEPLOYMENT_URL" ];
+          do
+            echo "DEPLOYMENT_URL=$(kubectl get services webapp-service --namespace=${{ env.BRANCH }} --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
+            sleep 1;
+
+            ((timeout--))
+
+            if [ "$timeout" == 0 ]; then
+              echo "ERROR: Timeout while waiting for DEPLOYMENT_URL"
+              exit 1
+            fi
+          done;
 
       - name: update the github deployment status
         uses: bobheadxi/deployments@v0.5.2
