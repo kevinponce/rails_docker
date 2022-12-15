@@ -40,6 +40,8 @@ kubectl apply -f .kubernetes/local/dynamodb-persistent-volume.yaml
 kubectl apply -f .kubernetes/local/dynamodb-config.yaml
 kubectl apply -f .kubernetes/local/dynamodb.yaml
 
+kubectl apply -f .kubernetes/local/s3.yaml
+
 kubectl apply -f .kubernetes/local/webapp.yaml
 ```
 
@@ -58,7 +60,7 @@ aws dynamodb list-tables --endpoint-url http://192.168.64.2:30433
 ### Access container shell
 ```
 kubectl get pods
-kubectl exec -it pod/webapp-deployment-b7ff9c6c6-kzcrj -- /bin/sh
+kubectl exec -it pod/webapp-deployment-597b4d85d6-z5tn6 -- /bin/sh
 bin/rails c
 ```
 

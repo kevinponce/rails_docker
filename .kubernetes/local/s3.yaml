@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s3-development
+  labels:
+    app: s3-development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: s3-development
+  template:
+    metadata:
+      labels:
+        app: s3-development
+    spec:
+      containers:
+        - image: localstack/localstack
+          name: s3
+          ports:
+            - containerPort: 4566 # S3
+          resources: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: s3
+spec:
+  type: NodePort
+  selector:
+    app: s3-development
+  ports:
+    - protocol: TCP
+      port: 4566 # S3
