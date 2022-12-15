@@ -72,3 +72,4 @@ group :test do
 end
 
 gem 'aws-sdk-dynamodb'
+gem 'aws-sdk-s3'

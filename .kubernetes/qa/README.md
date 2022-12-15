@@ -24,17 +24,19 @@ echo -n password | base64 # cGFzc3dvcmQ=
 
 ### Apply yaml files
 ```
-kubectl apply -f .kubernetesPostgres/postgres-config.yaml
-kubectl apply -f .kubernetesPostgres/postgres-secret.yaml
-kubectl apply -f .kubernetesPostgres/postgres-persistent-volume.yml
-kubectl apply -f .kubernetesPostgres/postgres.yaml
-kubectl apply -f .kubernetesPostgres/webapp.yaml
+kubectl apply -f .kubernetes/qa/postgres-config.yaml
+kubectl apply -f .kubernetes/qa/postgres-secret.yaml
+kubectl apply -f .kubernetes/qa/postgres.yaml
+
+kubectl apply -f .kubernetes/qa/s3.yaml
+
+kubectl apply -f .kubernetes/qa/webapp.yaml
 ```
 
 ### Debug
 ```
 kubectl get pods
-kubectl describe pod mongo-deployment-795bcf459d-q5m8v
+kubectl describe pod webapp-deployment-65d4754f9d-5btbf
 ```
 
 ### Access container shell
