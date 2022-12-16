@@ -42,6 +42,11 @@ kubectl apply -f .kubernetes/local/dynamodb.yaml
 
 kubectl apply -f .kubernetes/local/s3.yaml
 
+
+kubectl apply -f .kubernetes/local/redis-persistent-volume.yaml
+kubectl apply -f .kubernetes/local/redis-config.yaml
+kubectl apply -f .kubernetes/local/redis.yaml
+
 kubectl apply -f .kubernetes/local/webapp.yaml
 ```
 
@@ -60,8 +65,10 @@ aws dynamodb list-tables --endpoint-url http://192.168.64.2:30433
 ### Access container shell
 ```
 kubectl get pods
-kubectl exec -it pod/webapp-deployment-597b4d85d6-z5tn6 -- /bin/sh
+kubectl exec -it pod/webapp-deployment-76789d556-j9x6r -- /bin/sh
 bin/rails c
+
+kubectl exec --stdin --tty redis -- redis-cli
 ```
 
 ### Logs

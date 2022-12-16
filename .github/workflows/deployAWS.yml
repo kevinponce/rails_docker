@@ -102,7 +102,13 @@ jobs:
           kubectl apply -f .kubernetes/qa/postgres-secret.yaml --namespace=${{ env.BRANCH }} --wait=true
           kubectl apply -f .kubernetes/qa/postgres.yaml --namespace=${{ env.BRANCH }} --wait=true
 
+          kubectl apply -f .kubernetes/qa/redis-config.yaml --namespace=${{ env.BRANCH }} --wait=true
+          kubectl apply -f .kubernetes/qa/redis.yaml --namespace=${{ env.BRANCH }} --wait=true
+
           kubectl apply -f .kubernetes/qa/dynamodb.yaml --namespace=${{ env.BRANCH }} --wait=true
+
+          kubectl apply -f .kubernetes/qa/redis-config.yaml --namespace=${{ env.BRANCH }} --wait=true
+          kubectl apply -f .kubernetes/qa/redis.yaml --namespace=${{ env.BRANCH }} --wait=true
 
           kubectl apply -f .kubernetes/qa/s3.yaml --namespace=${{ env.BRANCH }} --wait=true
 
@@ -118,9 +124,10 @@ jobs:
 
       - name: Set DEPLOYMENT_URL
         run: |
-          # zero test
+          # Make sure DEPLOYMENT_URL is set and timeout after 60 seconds
           timeout=60
-          echo "${{ env.DEPLOYMENT_URL }}"
+
+          # zero test
           while [ -z "$DEPLOYMENT_URL" ];
           do
             DEPLOYMENT_URL=$(kubectl get services webapp-service --namespace=${{ env.BRANCH }} --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')
