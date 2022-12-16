@@ -38,6 +38,11 @@ spec:
             secretKeyRef:
               name: postgres-secret
               key: postgres-password
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: redis-config
+              key: redis-host
         - name: NOTHING
           value: "blahhhhh"
 ---
