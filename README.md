@@ -41,10 +41,9 @@ kompose convert -o .kubernetes/ -f docker-compose.yml
 ```
 
 # TODO
+* page to test pg
 * fix db name
-* add redis
-* add resque
-* Add dynamodb to testing eks
+* add sidkiq
 * Add redshift to testing eks
 * delete `.kubernetesMongo`
 * seed database
