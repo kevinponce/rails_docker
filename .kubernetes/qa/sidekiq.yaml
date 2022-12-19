@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sidekiq-deployment
+  labels:
+    app: sidekiq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sidekiq
+  template:
+    metadata:
+      labels:
+        app: sidekiq
+    spec:
+      containers:
+        - name: sidekiq
+          image: kevinponce/rails_docker:latest
+          env:
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: postgres-host
+            - name: POSTGRES_DB
+              value: "rails_docker_development"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-password
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: redis-host
+            - name: BLAH
+              value: "blahhh"
+          command:
+            - bundle
+            - exec
+            - sidekiq
+          ports:
+            - containerPort: 7433
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: 7433
+          #   initialDelaySeconds: 80 # app specific. Time your sidekiq takes to start processing.
+          #   timeoutSeconds: 5 # can be much less
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: 7433
+          #   initialDelaySeconds: 80 # app specific
+          #   timeoutSeconds: 5 # can be much less
+          # lifecycle:
+          #   preStop:
+          #     exec:
+          #       # SIGTERM triggers a quick exit; gracefully terminate instead
+          #       command: ["kube/sidekiq_quiet"]
+      # terminationGracePeriodSeconds: 60 # put your longest Job time here plus security time.
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sidekiq-service
+spec:
+  type: NodePort
+  selector:
+    app: sidekiq
+  ports:
+    - protocol: TCP
+      port: 7433
+      targetPort: 7433

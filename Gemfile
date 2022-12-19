@@ -74,3 +74,6 @@ end
 gem 'aws-sdk-dynamodb'
 gem 'aws-sdk-s3'
 
+gem 'sidekiq'
+gem 'sidekiq_alive'
+

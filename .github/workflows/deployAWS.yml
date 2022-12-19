@@ -120,7 +120,17 @@ jobs:
           kubectl set image deployment webapp-deployment webapp=${{ env.ECR_PATH }} --record --namespace=${{ env.BRANCH }}
 
           # assigns a env variable to force udpate webapp-deployment
-          kubectl set env deployment webapp-deployment NOTHING=$( date "+%Y-%m-%d_%H:%M:%S" ) --namespace=${{ env.BRANCH }}
+          kubectl set env deployment webapp-deployment DEPLOYED_AT=$( date "+%Y-%m-%d_%H:%M:%S" ) --namespace=${{ env.BRANCH }}
+
+      - name: Create Sidekiq
+        run: |
+          kubectl apply -f .kubernetes/qa/sidekiq.yaml --namespace=${{ env.BRANCH }} --wait=true
+
+          # assigns the branch image ecr path
+          kubectl set image deployment sidekiq-deployment sidekiq=${{ env.ECR_PATH }} --record --namespace=${{ env.BRANCH }}
+
+          # assigns a env variable to force udpate sidekiq-deployment
+          kubectl set env deployment sidekiq-deployment DEPLOYED_AT=$( date "+%Y-%m-%d_%H:%M:%S" ) --namespace=${{ env.BRANCH }}
 
       - name: Set DEPLOYMENT_URL
         run: |
