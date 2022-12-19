@@ -48,24 +48,24 @@ spec:
             - sidekiq
           ports:
             - containerPort: 7433
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 7433
-            initialDelaySeconds: 80 # app specific. Time your sidekiq takes to start processing.
-            timeoutSeconds: 5 # can be much less
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 7433
-            initialDelaySeconds: 80 # app specific
-            timeoutSeconds: 5 # can be much less
-          lifecycle:
-            preStop:
-              exec:
-                # SIGTERM triggers a quick exit; gracefully terminate instead
-                command: ["kube/sidekiq_quiet"]
-      terminationGracePeriodSeconds: 60 # put your longest Job time here plus security time.
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: 7433
+          #   initialDelaySeconds: 80 # app specific. Time your sidekiq takes to start processing.
+          #   timeoutSeconds: 5 # can be much less
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: 7433
+          #   initialDelaySeconds: 80 # app specific
+          #   timeoutSeconds: 5 # can be much less
+          # lifecycle:
+          #   preStop:
+          #     exec:
+          #       # SIGTERM triggers a quick exit; gracefully terminate instead
+          #       command: ["kube/sidekiq_quiet"]
+      # terminationGracePeriodSeconds: 60 # put your longest Job time here plus security time.
 ---
 apiVersion: v1
 kind: Service
