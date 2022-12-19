@@ -42,10 +42,11 @@ kubectl apply -f .kubernetes/local/dynamodb.yaml
 
 kubectl apply -f .kubernetes/local/s3.yaml
 
-
 kubectl apply -f .kubernetes/local/redis-persistent-volume.yaml
 kubectl apply -f .kubernetes/local/redis-config.yaml
 kubectl apply -f .kubernetes/local/redis.yaml
+
+kubectl apply -f .kubernetes/local/sidekiq.yaml
 
 kubectl apply -f .kubernetes/local/webapp.yaml
 ```

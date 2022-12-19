@@ -33,7 +33,7 @@ kubectl apply -f .kubernetes/qa/s3.yaml
 kubectl apply -f .kubernetes/qa/redis-config.yaml
 kubectl apply -f .kubernetes/qa/redis.yaml
 
-kubectl apply -f .kubernetes/local/sidekiq.yaml
+kubectl apply -f .kubernetes/qa/sidekiq.yaml
 
 kubectl apply -f .kubernetes/qa/webapp.yaml
 ```
