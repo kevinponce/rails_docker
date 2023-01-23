@@ -96,8 +96,6 @@ jobs:
 
       - name: Deploy image to AWS EKS
         run: |
-          kubectl apply -f .kubernetes/qa/aws-auth.yaml --wait=true
-
           kubectl apply -f .kubernetes/qa/postgres-config.yaml --namespace=${{ env.BRANCH }} --wait=true
           kubectl apply -f .kubernetes/qa/postgres-secret.yaml --namespace=${{ env.BRANCH }} --wait=true
           kubectl apply -f .kubernetes/qa/postgres.yaml --namespace=${{ env.BRANCH }} --wait=true
