@@ -45,3 +45,4 @@ kompose convert -o .kubernetes/ -f docker-compose.yml
 * Add redshift to testing eks
 * delete `.kubernetesMongo`
 * seed database
+* test
