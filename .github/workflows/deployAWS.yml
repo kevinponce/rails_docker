@@ -7,9 +7,9 @@ env:
   RELEASE_REVISION: "pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}"
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  AWS_REGION: ${{ secrets.AWS_REGION }}
-  ECR_REPOSITORY: my-cool-application
-  EKS_NAME: rails-docker2
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+  EKS_NAME: ${{ vars.EKS_NAME }}
 jobs:
   deploy:
     if: |
@@ -96,8 +96,6 @@ jobs:
 
       - name: Deploy image to AWS EKS
         run: |
-          kubectl apply -f .kubernetes/qa/aws-auth.yaml --wait=true
-
           kubectl apply -f .kubernetes/qa/postgres-config.yaml --namespace=${{ env.BRANCH }} --wait=true
           kubectl apply -f .kubernetes/qa/postgres-secret.yaml --namespace=${{ env.BRANCH }} --wait=true
           kubectl apply -f .kubernetes/qa/postgres.yaml --namespace=${{ env.BRANCH }} --wait=true
