@@ -96,3 +96,8 @@ kubectl get services
 kubectl delete service mongo-service
 kubectl delete service webapp-service
 ```
+
+### Dashboard
+```
+minikube dashboard
+```
