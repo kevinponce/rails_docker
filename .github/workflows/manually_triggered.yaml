@@ -25,4 +25,4 @@ jobs:
           method: 'GET'
           customHeaders: '{"Content-Type": "application/json"}'
           dataBack: '{ "repository": "${{github.event.repository.full_name}}", "number": "${{github.event.number}}", "created_at": "${{github.event.pull_request.created_at}}", "updated_at": "${{github.event.pull_request.updated_at}}" }'
-          data: '{ "test": "true" }'
+          data: '{"key_1": "value_1", "key_2": "value_2"}'
