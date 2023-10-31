@@ -21,8 +21,8 @@ jobs:
     - name: Webhook
       uses: fjogeleit/http-request-action@v1
       with:
-          url: 'https://157b-47-222-59-146.ngrok-free.app/webhooks/github_action'
+          url: 'https://fa51-47-222-59-146.ngrok-free.app/webhooks/github_action'
           method: 'GET'
           customHeaders: '{"Content-Type": "application/json"}'
           dataBack: '{ "repository": "${{github.event.repository.full_name}}", "number": "${{github.event.number}}", "created_at": "${{github.event.pull_request.created_at}}", "updated_at": "${{github.event.pull_request.updated_at}}" }'
-          data: '{"key_1": "value_1", "key_2": "value_2"}'
+          data: 'key_1=value_1&key_2=value_2'
