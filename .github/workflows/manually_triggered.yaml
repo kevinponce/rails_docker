@@ -16,5 +16,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        echo "Hello $!"
-        echo "- in $!"
+        echo "Log level: ${{ github.event.inputs.name }}"
+        echo "Log level: ${{ github.event.inputs.home }}"
