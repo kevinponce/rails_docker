@@ -24,4 +24,5 @@ jobs:
           url: 'https://157b-47-222-59-146.ngrok-free.app/webhooks/github_action'
           method: 'GET'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{ "repository": "${{github.event.repository.full_name}}", "number": "${{github.event.number}}", "created_at": "${{github.event.pull_request.created_at}}", "updated_at": "${{github.event.pull_request.updated_at}}" }'
+          dataBack: '{ "repository": "${{github.event.repository.full_name}}", "number": "${{github.event.number}}", "created_at": "${{github.event.pull_request.created_at}}", "updated_at": "${{github.event.pull_request.updated_at}}" }'
+          data: '{ "test": "true" }'
