@@ -7,8 +7,7 @@ on:
         required: true
       data:
         description: 'Stringified JSON Data'
-        required: false
-
+        required: true
 jobs:
   say_hello:
     runs-on: ubuntu-latest
