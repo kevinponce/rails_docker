@@ -2,22 +2,20 @@ name: Manually triggered workflow
 on:
   workflow_dispatch:
     inputs:
-      name:
-        description: 'Person to greet'
+      creative_draft_id:
+        description: 'Creative Draft ID'
         required: true
-        default: 'Mona the Octocat'
-      home:
-        description: 'location'
+      data:
+        description: 'Stringified JSON Data'
         required: false
-        default: 'The Octoverse'
 
 jobs:
   say_hello:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        echo "Log level: ${{ github.event.inputs.name }}"
-        echo "Log level: ${{ github.event.inputs.home }}"
+        echo "Log level: ${{ github.event.inputs.creative_draft_id }}"
+        echo "Log level: ${{ github.event.inputs.data }}"
     - name: Webhook
       uses: fjogeleit/http-request-action@v1
       with:
