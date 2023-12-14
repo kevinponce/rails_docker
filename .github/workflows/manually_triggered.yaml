@@ -21,7 +21,7 @@ jobs:
     - name: Webhook
       uses: fjogeleit/http-request-action@v1
       with:
-          url: 'https://fa51-47-222-59-146.ngrok-free.app/webhooks/github_action'
+          url: 'https://99da-47-220-63-33.ngrok-free.app/webhooks/github_actions/test_creative_draft_results'
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
           data: '{ "repository": "${{github.event.repository.full_name}}", "number": "${{github.event.number}}", "created_at": "${{github.event.pull_request.created_at}}", "updated_at": "${{github.event.pull_request.updated_at}}" }'
