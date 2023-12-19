@@ -21,4 +21,4 @@ jobs:
           url: 'https://99da-47-220-63-33.ngrok-free.app/webhooks/github_actions/test_creative_draft_results'
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{ "creative_draft_test_id": "${{ github.event.inputs.creative_draft_test_id }}", "status": "passed" }'
+          data: '{ "creative_draft_test_id": "${{ github.event.inputs.creative_draft_test_id }}", "status": "failed", "message": "You forgot to set ___." }'
