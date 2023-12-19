@@ -2,8 +2,8 @@ name: Manually triggered workflow
 on:
   workflow_dispatch:
     inputs:
-      creative_draft_id:
-        description: 'Creative Draft ID'
+      creative_draft_test_id:
+        description: 'Creative Draft Test ID'
         required: true
       data:
         description: 'Stringified JSON Data'
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        echo "Log level: ${{ github.event.inputs.creative_draft_id }}"
+        echo "Log level: ${{ github.event.inputs.creative_draft_test_id }}"
         echo "Log level: ${{ github.event.inputs.data }}"
     - name: Webhook
       uses: fjogeleit/http-request-action@v1
@@ -21,4 +21,4 @@ jobs:
           url: 'https://99da-47-220-63-33.ngrok-free.app/webhooks/github_actions/test_creative_draft_results'
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{ "creative_draft_id": "${{ github.event.inputs.creative_draft_id }}", "status": "pass", "repository": "${{github.event.repository.full_name}}", "number": "${{github.event.number}}", "created_at": "${{github.event.pull_request.created_at}}", "updated_at": "${{github.event.pull_request.updated_at}}" }'
+          data: '{ "creative_draft_test_id": "${{ github.event.inputs.creative_draft_test_id }}", "status": "passed" }'
